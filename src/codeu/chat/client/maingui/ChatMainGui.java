@@ -87,16 +87,9 @@ public final class ChatMainGui {
     final GridBagConstraints conversationViewC = new GridBagConstraints();
 
     //Make a seperate class for this
-    final JPanel titleViewPanel = new JPanel(new GridBagLayout());
+    final JPanel titleViewPanel = new TitlePanel();
     titleViewPanel.setBorder(paneBorder());
-    titleViewPanel.setBackground(Color.decode("#2A96A5"));
     final GridBagConstraints titleViewC = new GridBagConstraints();
-    final JLabel titleLabel = new JLabel("Chat", JLabel.CENTER);
-    titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-    titleLabel.setForeground(Color.decode("#EFF5F7"));
-    titleLabel.setFont(new Font("Hoefler Text", Font.BOLD, 36));
-    titleViewPanel.add(titleLabel);
-
 
     // Placement of main panels.
     titleViewC.gridx = 0;
