@@ -46,27 +46,36 @@ public final class UserPanel extends JPanel {
     final JPanel titlePanel = new JPanel(new GridBagLayout());
     final GridBagConstraints titlePanelC = new GridBagConstraints();
 
-    final JLabel titleLabel = new JLabel("Users", JLabel.LEFT);
+    final JLabel titleLabel = new JLabel();
+    titleLabel.setBackground(new Color(239, 246, 247));
+    titleLabel.setFont(new Font("PT Serif", 0, 14)); // NOI18N
+    titleLabel.setForeground(new Color(111, 117, 121));
+    titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+    titleLabel.setText("Users");
+    titleLabel.setOpaque(true);
+    
+    final JButton userAddButton = new JButton("+");
     final GridBagConstraints titleLabelC = new GridBagConstraints();
     titleLabelC.gridx = 0;
     titleLabelC.gridy = 0;
     titleLabelC.anchor = GridBagConstraints.PAGE_START;
 
-    final GridBagConstraints titleGapC = new GridBagConstraints();
-    titleGapC.gridx = 1;
-    titleGapC.gridy = 0;
-    titleGapC.fill = GridBagConstraints.HORIZONTAL;
-    titleGapC.weightx = 0.9;
+    // final GridBagConstraints titleGapC = new GridBagConstraints();
+    // titleGapC.gridx = 1;
+    // titleGapC.gridy = 0;
+    // titleGapC.fill = GridBagConstraints.HORIZONTAL;
+    // titleGapC.weightx = 0.9;
 
-    final JLabel userSignedInLabel = new JLabel("not signed in", JLabel.RIGHT);
-    final GridBagConstraints titleUserC = new GridBagConstraints();
-    titleUserC.gridx = 2;
-    titleUserC.gridy = 0;
-    titleUserC.anchor = GridBagConstraints.LINE_END;
+    // final JLabel userSignedInLabel = new JLabel("not signed in", JLabel.RIGHT);
+    // final GridBagConstraints titleUserC = new GridBagConstraints();
+    // titleUserC.gridx = 2;
+    // titleUserC.gridy = 0;
+    // titleUserC.anchor = GridBagConstraints.LINE_END;
 
     titlePanel.add(titleLabel, titleLabelC);
-    titlePanel.add(Box.createHorizontalGlue(), titleGapC);
-    titlePanel.add(userSignedInLabel, titleUserC);
+    // titlePanel.add(Box.createHorizontalGlue(), titleGapC);
+    titlePanel.add(userAddButton);
+    // titlePanel.add(userSignedInLabel, titleUserC);
     titlePanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
     // User List panel.
@@ -81,16 +90,16 @@ public final class UserPanel extends JPanel {
 
     final JScrollPane userListScrollPane = new JScrollPane(userList);
     listShowPanel.add(userListScrollPane);
-    userListScrollPane.setPreferredSize(new Dimension(150, 150));
+    userListScrollPane.setPreferredSize(new Dimension(245, 200));
 
     // Current User panel
     final JPanel currentPanel = new JPanel();
     final GridBagConstraints currentPanelC = new GridBagConstraints();
 
-    final JTextArea userInfoPanel = new JTextArea();
-    final JScrollPane userInfoScrollPane = new JScrollPane(userInfoPanel);
-    currentPanel.add(userInfoScrollPane);
-    userInfoScrollPane.setPreferredSize(new Dimension(245, 85));
+    // final JTextArea userInfoPanel = new JTextArea();
+    // final JScrollPane userInfoScrollPane = new JScrollPane(userInfoPanel);
+    // currentPanel.add(userInfoScrollPane);
+    // userInfoScrollPane.setPreferredSize(new Dimension(245, 85));
 
     // Button bar
     final JPanel buttonPanel = new JPanel();
@@ -98,11 +107,9 @@ public final class UserPanel extends JPanel {
 
     final JButton userUpdateButton = new JButton("Update");
     final JButton userSignInButton = new JButton("Sign In");
-    final JButton userAddButton = new JButton("Add");
 
     buttonPanel.add(userUpdateButton);
     buttonPanel.add(userSignInButton);
-    buttonPanel.add(userAddButton);
 
     // Placement of title, list panel, buttons, and current user panel.
     titlePanelC.gridx = 0;
@@ -152,7 +159,7 @@ public final class UserPanel extends JPanel {
         if (userList.getSelectedIndex() != -1) {
           final String data = userList.getSelectedValue();
           clientContext.user.signInUser(data);
-          userSignedInLabel.setText("Hello " + data);
+          // userSignedInLabel.setText("Hello " + data);
         }
       }
     });
@@ -161,7 +168,7 @@ public final class UserPanel extends JPanel {
       @Override
       public void actionPerformed(ActionEvent e) {
         final String s = (String) JOptionPane.showInputDialog(
-            UserPanel.this, "Enter user name:", "Add User", JOptionPane.PLAIN_MESSAGE,
+            UserPanel.this, "Enter Username:", "Create User", JOptionPane.PLAIN_MESSAGE,
             null, null, "");
         if (s != null && s.length() > 0) {
           clientContext.user.addUser(s);
@@ -170,15 +177,15 @@ public final class UserPanel extends JPanel {
       }
     });
 
-    userList.addListSelectionListener(new ListSelectionListener() {
-      @Override
-      public void valueChanged(ListSelectionEvent e) {
-        if (userList.getSelectedIndex() != -1) {
-          final String data = userList.getSelectedValue();
-          userInfoPanel.setText(clientContext.user.showUserInfo(data));
-        }
-      }
-    });
+    // userList.addListSelectionListener(new ListSelectionListener() {
+    //   @Override
+    //   public void valueChanged(ListSelectionEvent e) {
+    //     if (userList.getSelectedIndex() != -1) {
+    //       final String data = userList.getSelectedValue();
+    //       userInfoPanel.setText(clientContext.user.showUserInfo(data));
+    //     }
+    //   }
+    // });
 
     getAllUsers(listModel);
   }
