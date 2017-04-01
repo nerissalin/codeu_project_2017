@@ -70,6 +70,7 @@ public final class ChatMainGui {
     // Main View - outermost graphics panel.
     final JPanel mainViewPanel = new JPanel(new GridBagLayout());
     mainViewPanel.setBorder(paneBorder());
+    mainViewPanel.setBackground(Color.white);
 
     // Build main panels - Users, Conversations, Messages.
     final JPanel usersViewPanel = new UserPanel(clientContext);
@@ -85,33 +86,54 @@ public final class ChatMainGui {
     conversationsViewPanel.setBorder(paneBorder());
     final GridBagConstraints conversationViewC = new GridBagConstraints();
 
+    //Make a seperate class for this
+    final JPanel titleViewPanel = new JPanel(new GridBagLayout());
+    titleViewPanel.setBorder(paneBorder());
+    titleViewPanel.setBackground(Color.decode("#2A96A5"));
+    final GridBagConstraints titleViewC = new GridBagConstraints();
+    final JLabel titleLabel = new JLabel("Chat", JLabel.CENTER);
+    titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+    titleLabel.setForeground(Color.decode("#EFF5F7"));
+    titleLabel.setFont(new Font("Hoefler Text", Font.BOLD, 36));
+    titleViewPanel.add(titleLabel);
+
+
     // Placement of main panels.
+    titleViewC.gridx = 0;
+    titleViewC.gridy = 0;
+    titleViewC.gridwidth = 4;
+    titleViewC.gridheight = 1;
+    titleViewC.fill = GridBagConstraints.BOTH;
+    titleViewC.weightx = 0.3;
+    titleViewC.weighty = 0.3;
+
     usersViewC.gridx = 0;
-    usersViewC.gridy = 0;
+    usersViewC.gridy = 1;
     usersViewC.gridwidth = 1;
-    usersViewC.gridheight = 1;
+    usersViewC.gridheight = 3;
     usersViewC.fill = GridBagConstraints.BOTH;
     usersViewC.weightx = 0.3;
     usersViewC.weighty = 0.3;
 
-    conversationViewC.gridx = 1;
-    conversationViewC.gridy = 0;
+    conversationViewC.gridx = 3;
+    conversationViewC.gridy = 1;
     conversationViewC.gridwidth = 1;
-    conversationViewC.gridheight = 1;
+    conversationViewC.gridheight = 3;
     conversationViewC.fill = GridBagConstraints.BOTH;
     conversationViewC.weightx = 0.7;
     conversationViewC.weighty = 0.3;
 
-    messagesViewC.gridx = 0;
+    messagesViewC.gridx = 1;
     messagesViewC.gridy = 1;
     messagesViewC.gridwidth = 2;
-    messagesViewC.gridheight = 1;
+    messagesViewC.gridheight = 3;
     messagesViewC.fill = GridBagConstraints.BOTH;
     messagesViewC.weighty = 0.7;
 
     mainViewPanel.add(usersViewPanel, usersViewC);
     mainViewPanel.add(conversationsViewPanel, conversationViewC);
     mainViewPanel.add(messagesViewPanel, messagesViewC);
+    mainViewPanel.add(titleViewPanel, titleViewC);
 
     mainFrame.add(mainViewPanel);
     mainFrame.pack();
