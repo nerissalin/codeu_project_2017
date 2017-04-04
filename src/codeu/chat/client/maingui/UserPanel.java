@@ -46,10 +46,13 @@ public final class UserPanel extends JPanel {
     final JPanel titlePanel = new JPanel(new GridBagLayout());
     final GridBagConstraints titlePanelC = new GridBagConstraints();
 
+    titlePanel.setBackground(Color.decode("#EFF6F7"));
+
     final JLabel titleLabel = new JLabel();
-    titleLabel.setBackground(new Color(239, 246, 247));
-    titleLabel.setFont(new Font("PT Serif", 0, 14)); // NOI18N
-    titleLabel.setForeground(new Color(111, 117, 121));
+    titleLabel.setBackground(Color.decode("#EFF6F7"));
+    titleLabel.setFont(new Font("Hoefler Text", 0, 18)); // NOI18N
+    titleLabel.setForeground(Color.decode("#6F7579"));
+
     titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
     titleLabel.setText("Users");
     titleLabel.setOpaque(true);
