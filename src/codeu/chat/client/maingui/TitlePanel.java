@@ -9,8 +9,6 @@ import codeu.chat.common.ConversationSummary;
 import codeu.chat.common.Message;
 import codeu.chat.common.User;
 
-// NOTE: JPanel is serializable, but there is no need to serialize MessagePanel
-// without the @SuppressWarnings, the compiler will complain of no override for serialVersionUID
 @SuppressWarnings("serial")
 public final class TitlePanel extends JPanel {
 

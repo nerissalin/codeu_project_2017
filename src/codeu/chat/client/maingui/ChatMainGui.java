@@ -23,7 +23,7 @@ import codeu.chat.client.Controller;
 import codeu.chat.client.View;
 import codeu.chat.util.Logger;
 
-// Chat - top-level client application - Java Simple GUI (using Java Swing)
+// Chat - top-level client application - Java Main GUI (using Java Swing)
 public final class ChatMainGui {
 
   private final static Logger.Log LOG = Logger.newLog(ChatMainGui.class);
