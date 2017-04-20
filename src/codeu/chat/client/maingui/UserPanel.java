@@ -17,6 +17,9 @@ package codeu.chat.client.maingui;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -63,8 +66,15 @@ public final class UserPanel extends JPanel {
     titleLabelC.gridy = 0;
     titleLabelC.anchor = GridBagConstraints.PAGE_START;
 
+    final JLabel userSignedInLabel = new JLabel("not signed in", JLabel.RIGHT);
+    final GridBagConstraints titleUserC = new GridBagConstraints();
+    titleUserC.gridx = 2;
+    titleUserC.gridy = 0;
+    titleUserC.anchor = GridBagConstraints.LINE_END;
+
     titlePanel.add(titleLabel, titleLabelC);
     titlePanel.add(userAddButton);
+    titlePanel.add(userSignedInLabel, titleUserC);
     titlePanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
     // User List panel.
@@ -140,9 +150,25 @@ public final class UserPanel extends JPanel {
     userSignInButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
+        System.out.println("sign in button clicked");
+
         if (userList.getSelectedIndex() != -1) {
           final String data = userList.getSelectedValue();
           clientContext.user.signInUser(data);
+          userSignedInLabel.setText("Hello " + data);
+        }
+      }
+    });
+
+    userList.addMouseListener(new MouseAdapter() {
+      @Override
+      public void mouseClicked(MouseEvent mouseEvent) {
+        if (mouseEvent.getClickCount() > 1) {
+          if (userList.getSelectedIndex() != -1) {
+            final String data = userList.getSelectedValue();
+            clientContext.user.signInUser(data);
+            userSignedInLabel.setText("Hello " + data);
+          }
         }
       }
     });
@@ -151,8 +177,8 @@ public final class UserPanel extends JPanel {
       @Override
       public void actionPerformed(ActionEvent e) {
         final String s = (String) JOptionPane.showInputDialog(
-            UserPanel.this, "Enter Username:", "Create User", JOptionPane.PLAIN_MESSAGE,
-            null, null, "");
+          UserPanel.this, "Enter Username:", "Create User", JOptionPane.PLAIN_MESSAGE,
+          null, null, "");
         if (s != null && s.length() > 0) {
           clientContext.user.addUser(s);
           UserPanel.this.getAllUsers(listModel);
