@@ -112,11 +112,15 @@ public final class MessagePanel extends JPanel {
     userListScrollPane.setPreferredSize(new Dimension(500, 200));
 
     // Button panel
-    final JPanel buttonPanel = new JPanel();
-    final GridBagConstraints buttonPanelC = new GridBagConstraints();
+    final JPanel textPanel = new JPanel();
+    final GridBagConstraints textPanelC = new GridBagConstraints();
 
-    final JButton addButton = new JButton("Add");
-    buttonPanel.add(addButton);
+    final JTextField typeMessage = new JTextField(20);
+    textPanel.add(typeMessage);
+
+    final JButton sendButton = new JButton("Send");
+    textPanel.add(sendButton);
+
 
     // Placement of title, list panel, buttons, and current user panel.
     titlePanelC.gridx = 0;
@@ -134,19 +138,19 @@ public final class MessagePanel extends JPanel {
     listPanelC.anchor = GridBagConstraints.FIRST_LINE_START;
     listPanelC.weighty = 0.8;
 
-    buttonPanelC.gridx = 0;
-    buttonPanelC.gridy = 11;
-    buttonPanelC.gridwidth = 10;
-    buttonPanelC.gridheight = 1;
-    buttonPanelC.fill = GridBagConstraints.HORIZONTAL;
-    buttonPanelC.anchor = GridBagConstraints.FIRST_LINE_START;
+    textPanelC.gridx = 0;
+    textPanelC.gridy = 11;
+    textPanelC.gridwidth = 10;
+    textPanelC.gridheight = 1;
+    textPanelC.fill = GridBagConstraints.HORIZONTAL;
+    textPanelC.anchor = GridBagConstraints.FIRST_LINE_START;
 
     this.add(titlePanel, titlePanelC);
     this.add(listShowPanel, listPanelC);
-    this.add(buttonPanel, buttonPanelC);
+    this.add(textPanel, textPanelC);
 
     // User click Messages Add button - prompt for message body and add new Message to Conversation
-    addButton.addActionListener(new ActionListener() {
+    sendButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
         if (!clientContext.user.hasCurrent()) {
@@ -154,20 +158,24 @@ public final class MessagePanel extends JPanel {
         } else if (!clientContext.conversation.hasCurrent()) {
           JOptionPane.showMessageDialog(MessagePanel.this, "You must select a conversation.");
         } else {
-          final String messageText = (String) JOptionPane.showInputDialog(
-              MessagePanel.this, "Enter message:", "Add Message", JOptionPane.PLAIN_MESSAGE,
-              null, null, "");
+          final String messageText = typeMessage.getText();
           if (messageText != null && messageText.length() > 0) {
             clientContext.message.addMessage(
                 clientContext.user.getCurrent().id,
                 clientContext.conversation.getCurrentId(),
                 messageText);
+                typeMessage.setText("");
             MessagePanel.this.getAllMessages(clientContext.conversation.getCurrent());
           }
         }
       }
     });
 
+    typeMessage.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent evt) {
+          sendButton.doClick(); // Re-use the Ok buttons ActionListener...
+      }
+    });
     // Panel is set up. If there is a current conversation, Populate the conversation list.
     getAllMessages(clientContext.conversation.getCurrent());
   }
