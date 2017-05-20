@@ -177,28 +177,38 @@ public final class Uuids {
     }
   }
 
-  // FROM STRING
+  // Parse
   //
   // Create a uuid from a sting.
-  public static Uuid fromString(String string) {
-    return fromString(null, string.split("\\."), 0);
+  public static Uuid parse(String string) throws IOException {
+    return parse(null, string.split("\\."), 0);
   }
 
-  private static Uuid fromString(final Uuid root, String[] tokens, int index) {
+  private static Uuid parse(final Uuid root, String[] tokens, int index) throws IOException {
 
-    final int id = Integer.parseInt(tokens[index]);
+    final long id = Long.parseLong(tokens[index]);
 
+<<<<<<< HEAD:src/codeu/chat/common/Uuids.java
     final Uuid link = complete(new Uuid() {
       @Override
       public Uuid root() { return root; }
       @Override
       public int id() { return id; }
     });
+=======
+    if ((id >> 32) != 0) {
+      throw new IOException(String.format(
+          "ID value '%s' is too large to be an unsigned 32 bit integer",
+          tokens[index]));
+    }
+
+    final Uuid link = new Uuid(root, (int)(id & 0xFFFFFFFF));
+>>>>>>> master:src/codeu/chat/util/Uuid.java
 
     final int nextIndex = index + 1;
 
     return nextIndex < tokens.length ?
-        fromString(link, tokens, nextIndex) :
+        parse(link, tokens, nextIndex) :
         link;
   }
 }

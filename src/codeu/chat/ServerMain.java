@@ -47,13 +47,27 @@ final class ServerMain {
 
     LOG.info("============================= START OF LOG =============================");
 
+<<<<<<< HEAD
     final Uuid id = Uuids.fromString(args[0]);
+=======
+    final int myPort = Integer.parseInt(args[2]);
+>>>>>>> master
     final byte[] secret = Secret.parse(args[1]);
 
-    final int myPort = Integer.parseInt(args[2]);
+    Uuid id = null;
+    try {
+      id = Uuid.parse(args[0]);
+    } catch (IOException ex) {
+      System.out.println("Invalid id - shutting down server");
+      System.exit(1);
+    }
 
-    final RemoteAddress relayAddress = args.length > 3 ?
-                                       RemoteAddress.parse(args[3]) :
+    // This is the directory where it is safe to store data accross runs
+    // of the server.
+    final String persistentPath = args[3];
+
+    final RemoteAddress relayAddress = args.length > 4 ?
+                                       RemoteAddress.parse(args[4]) :
                                        null;
 
     try (

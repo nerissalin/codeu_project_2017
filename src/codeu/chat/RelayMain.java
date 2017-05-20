@@ -55,28 +55,42 @@ final class RelayMain {
 
       LOG.info("Relay object created.");
 
-      LOG.info("Loading team data...");
-
-      loadTeamInfo(relay, args[1]);
-
-      LOG.info("Done loading team data.");
-
       LOG.info("Starting relay...");
 
-      startRelay(relay, source);
+      startRelay(relay, source, args[1]);
 
     } catch (IOException ex) {
       LOG.error(ex, "Failed to establish server accept port");
     }
   }
 
+<<<<<<< HEAD
   private static void startRelay(Server relay, ConnectionSource source) {
     
+=======
+  private static void startRelay(final Server relay,
+                                 final ConnectionSource source,
+                                 final String teamFile) {
+
+>>>>>>> master
     final ServerFrontEnd frontEnd = new ServerFrontEnd(relay);
     LOG.info("Relay front end object created.");
 
     final Timeline timeline = new Timeline();
     LOG.info("Relay timeline created.");
+
+    timeline.scheduleNow(new Runnable() {
+      @Override
+      public void run() {
+        LOG.info("Loading team data...");
+        loadTeamInfo(relay, teamFile);
+        LOG.info("Done loading team data.");
+
+        // Add this again in 1 minute so that new team entries will be added to
+        // the relay. This won't support updating entries.
+        timeline.scheduleIn(60000, this);
+      }
+    });
 
     LOG.info("Starting relay main loop...");
 
@@ -115,7 +129,9 @@ final class RelayMain {
 
         line = line.trim();
 
-        if (line.startsWith("#")) {
+        if (line.length() == 0) {
+          // This line is blank, skip it
+        } else if (line.startsWith("#")) {
           // this is a comment, skip it
         } else {
 
@@ -127,7 +143,11 @@ final class RelayMain {
             // this line that it is not worth trying to handle ahead of time.
             // So instead just try to parse it and catch any exception.
 
+<<<<<<< HEAD
             final Uuid id = Uuids.fromString(tokens[0].trim());
+=======
+            final Uuid id = Uuid.parse(tokens[0].trim());
+>>>>>>> master
             final byte[] secret = Secret.parse(tokens[1].trim());
 
             relay.addTeam(id, secret);
