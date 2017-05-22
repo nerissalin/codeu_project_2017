@@ -64,15 +64,9 @@ final class RelayMain {
     }
   }
 
-<<<<<<< HEAD
-  private static void startRelay(Server relay, ConnectionSource source) {
-    
-=======
   private static void startRelay(final Server relay,
                                  final ConnectionSource source,
                                  final String teamFile) {
-
->>>>>>> master
     final ServerFrontEnd frontEnd = new ServerFrontEnd(relay);
     LOG.info("Relay front end object created.");
 
@@ -143,11 +137,8 @@ final class RelayMain {
             // this line that it is not worth trying to handle ahead of time.
             // So instead just try to parse it and catch any exception.
 
-<<<<<<< HEAD
-            final Uuid id = Uuids.fromString(tokens[0].trim());
-=======
             final Uuid id = Uuid.parse(tokens[0].trim());
->>>>>>> master
+
             final byte[] secret = Secret.parse(tokens[1].trim());
 
             relay.addTeam(id, secret);

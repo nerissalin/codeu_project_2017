@@ -215,15 +215,6 @@ public final class Server implements Relay {
          "Request to read from server requested=%d allowed=%d",
           range,
           maxRead);
-
-<<<<<<< HEAD
-      // Writing is a one way flag (once set it will not be unset) that switches
-      // between looking for the starting message and writing all messages to the
-      // output.
-      boolean writing = root == Uuids.NULL || root == null;
-
-=======
->>>>>>> master
       for (final Relay.Bundle message : history) {
 
         // Only add a message if there is room. We cannot stop
@@ -232,18 +223,10 @@ public final class Server implements Relay {
           found.add(message);
         }
 
-<<<<<<< HEAD
-        remaining = Math.max(remaining - 1, 0);
-
-        // Only update "writing" after the check as the root is already known and
-        // should not be included in the output.
-        writing |= Uuids.equals(root, message.id());
-=======
         // If the start is found, drop all previous messages.
         if (message.id().equals(root)) {
           found.clear();
         }
->>>>>>> master
       }
 
       LOG.info(

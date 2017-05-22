@@ -215,16 +215,6 @@ public final class ServerTest {
       assertTrue(Uuids.equals(bundle.message().id(), makeTestUuid(7)));
     }
   }
-
-<<<<<<< HEAD
-  private static Uuid makeTestUuid(final int id) {
-    return Uuids.complete(new Uuid() {
-      @Override
-      public Uuid root() { return null; }
-      @Override
-      public int id() { return id; }
-    });
-=======
   @Test
   public void testReadWithMissingRoot() {
 
@@ -295,6 +285,5 @@ public final class ServerTest {
       // bundle 2, the id should be 3.
       assertTrue(Uuid.equals(bundle.id(), new Uuid(3)));
     }
->>>>>>> master
   }
 }
