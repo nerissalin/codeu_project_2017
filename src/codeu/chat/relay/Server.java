@@ -24,10 +24,10 @@ import java.util.Queue;
 
 import codeu.chat.common.LinearUuidGenerator;
 import codeu.chat.common.Relay;
-import codeu.chat.common.Time;
-import codeu.chat.common.Uuid;
-import codeu.chat.common.Uuids;
 import codeu.chat.util.Logger;
+import codeu.chat.util.Time;
+import codeu.chat.util.Logger;
+import codeu.chat.util.Uuid;
 
 public final class Server implements Relay {
 
@@ -215,6 +215,7 @@ public final class Server implements Relay {
          "Request to read from server requested=%d allowed=%d",
           range,
           maxRead);
+
       for (final Relay.Bundle message : history) {
 
         // Only add a message if there is room. We cannot stop
