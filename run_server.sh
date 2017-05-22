@@ -14,10 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-<<<<<<< HEAD
-cd './bin'
-java codeu.chat.ServerMain "100.101" "ABABAB" "2007"
-=======
 TEAM_ID="$1"
 TEAM_SECRET="$2"
 PORT="$3"
@@ -59,4 +55,3 @@ else
       "${PERSISTENT_DIR}" \
       "${RELAY_ADDRESS}"
 fi
->>>>>>> master

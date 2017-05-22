@@ -14,13 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-<<<<<<< HEAD
-LOCAL_MACHINE="localhost@2007"
-
-cd './bin'
-
-java codeu.chat.ClientMain "$LOCAL_MACHINE"
-=======
 HOST="$1"
 PORT="$2"
 
@@ -31,4 +24,3 @@ fi
 
 cd './bin'
 java codeu.chat.ClientMain "${HOST}@${PORT}"
->>>>>>> master

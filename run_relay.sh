@@ -14,12 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-<<<<<<< HEAD
-TEAMS_FILE="$(pwd)/teams"
-
-cd './bin'
-java codeu.chat.RelayMain '2008' "$TEAMS_FILE"
-=======
 PORT="$1"
 TEAM_FILE="$2"
 
@@ -35,4 +29,3 @@ fi
 
 cd './bin'
 java codeu.chat.RelayMain "${PORT}" "${TEAM_FILE}"
->>>>>>> master
