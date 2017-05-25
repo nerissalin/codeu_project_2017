@@ -172,7 +172,6 @@ public final class UserPanel extends JPanel {
         }
       }
     });
-
     userAddButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {

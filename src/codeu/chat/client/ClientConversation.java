@@ -96,9 +96,8 @@ public final class ClientConversation {
           (validInputs) ? "server failure" : "bad input value");
     } else {
       LOG.info("New conversation: Title= \"%s\" UUID= %s", conv.title, conv.id);
-
+      conv.users.add(owner);
       currentSummary = conv.summary;
-
       updateAllConversations(currentSummary != null);
     }
   }
@@ -107,7 +106,6 @@ public final class ClientConversation {
 
   public void showAllConversations() {
     updateAllConversations(false);
-
     for (final ConversationSummary c : summariesByUuid.values()) {
       printConversation(c, userContext);
     }
