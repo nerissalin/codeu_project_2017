@@ -43,7 +43,6 @@ public final class ClientUser {
   public ClientUser(Controller controller, View view) {
     this.controller = controller;
     this.view = view;
-    this.admin = addUser("ADMIN");
   }
 
   // Validate the username string
