@@ -33,10 +33,12 @@ import codeu.chat.common.User;
 public final class UserPanel extends JPanel {
 
   private final ClientContext clientContext;
+  private final ConversationPanel conversationPanel;
 
-  public UserPanel(ClientContext clientContext) {
+  public UserPanel(ClientContext clientContext, ConversationPanel conversationPanel) {
     super(new GridBagLayout());
     this.clientContext = clientContext;
+    this.conversationPanel = conversationPanel;
     initialize();
   }
 
@@ -155,6 +157,7 @@ public final class UserPanel extends JPanel {
         if (userList.getSelectedIndex() != -1) {
           final String data = userList.getSelectedValue();
           clientContext.user.signInUser(data);
+          conversationPanel.updateButton.doClick();
           userSignedInLabel.setText("Hello " + data);
         }
       }
@@ -167,6 +170,7 @@ public final class UserPanel extends JPanel {
           if (userList.getSelectedIndex() != -1) {
             final String data = userList.getSelectedValue();
             clientContext.user.signInUser(data);
+            conversationPanel.updateButton.doClick();
             userSignedInLabel.setText("Hello " + data);
           }
         }
