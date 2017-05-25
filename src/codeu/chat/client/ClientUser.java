@@ -31,6 +31,7 @@ public final class ClientUser {
   private static final Collection<Uuid> EMPTY = Arrays.asList(new Uuid[0]);
   private final Controller controller;
   private final View view;
+  public Uuid admin;
 
   private User current = null;
 
@@ -42,6 +43,7 @@ public final class ClientUser {
   public ClientUser(Controller controller, View view) {
     this.controller = controller;
     this.view = view;
+    this.admin = addUser("ADMIN");
   }
 
   // Validate the username string
@@ -88,7 +90,7 @@ public final class ClientUser {
     printUser(current);
   }
 
-  public void addUser(String name) {
+  public Uuid addUser(String name) {
     final boolean validInputs = isValidName(name);
 
     final User user = (validInputs) ? controller.newUser(name) : null;
@@ -100,6 +102,7 @@ public final class ClientUser {
       LOG.info("New user complete, Name= \"%s\" UUID=%s", user.name, user.id);
       updateUsers();
     }
+    return user.id;
   }
 
   public void showAllUsers() {
