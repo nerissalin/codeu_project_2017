@@ -31,6 +31,7 @@ public final class ConversationPanel extends JPanel {
 
   private final ClientContext clientContext;
   private final MessagePanel messagePanel;
+  public JButton updateButton;
 
   public ConversationPanel(ClientContext clientContext, MessagePanel messagePanel) {
     super(new GridBagLayout());
@@ -73,7 +74,7 @@ public final class ConversationPanel extends JPanel {
     final JPanel buttonPanel = new JPanel();
     final GridBagConstraints buttonPanelC = new GridBagConstraints();
 
-    final JButton updateButton = new JButton("Update");
+    this.updateButton = new JButton("Update");
     final JButton addButton = new JButton("Add");
 
     updateButton.setAlignmentX(Component.LEFT_ALIGNMENT);
