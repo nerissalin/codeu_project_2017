@@ -152,8 +152,6 @@ public final class UserPanel extends JPanel {
     userSignInButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
-        System.out.println("sign in button clicked");
-
         if (userList.getSelectedIndex() != -1) {
           final String data = userList.getSelectedValue();
           clientContext.user.signInUser(data);

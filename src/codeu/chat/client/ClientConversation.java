@@ -87,10 +87,10 @@ public final class ClientConversation {
     printConversation(currentSummary, userContext);
   }
 
-  public void startConversation(String title, Uuid owner) {
+  public void startConversation(String title, Uuid owner, String purpose) {
     final boolean validInputs = isValidTitle(title);
 
-    final Conversation conv = (validInputs) ? controller.newConversation(title, owner) : null;
+    final Conversation conv = (validInputs) ? controller.newConversation(title, owner, purpose) : null;
 
     if (conv == null) {
       System.out.format("Error: conversation not created - %s.\n",

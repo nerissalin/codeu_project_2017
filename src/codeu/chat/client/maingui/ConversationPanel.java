@@ -121,14 +121,25 @@ public final class ConversationPanel extends JPanel {
     addButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
+        JTextField titleField = new JTextField(15);
+        JTextArea purpArea = new JTextArea(5, 5);
+        Object[] message = {
+          "Title:", titleField,
+          "Purpose:", purpArea
+        };
+
         if (clientContext.user.hasCurrent()) {
-          final String s = (String) JOptionPane.showInputDialog(
-              ConversationPanel.this, "Enter title:", "Add Conversation", JOptionPane.PLAIN_MESSAGE,
-              null, null, "");
-          if (s != null && s.length() > 0) {
-            clientContext.conversation.startConversation(s, clientContext.user.getCurrent().id);
-            ConversationPanel.this.getAllConversations(listModel);
+          int result = JOptionPane.showConfirmDialog(null, message, "Add Conversation", JOptionPane.OK_CANCEL_OPTION);
+
+          if (result == JOptionPane.OK_OPTION) {
+            String title = titleField.getText();
+            String purpose = purpArea.getText();
+            
+            if (title != null && title.length() > 0) {
+              clientContext.conversation.startConversation(title, clientContext.user.getCurrent().id, purpose);
+              ConversationPanel.this.getAllConversations(listModel);
           }
+            }
         } else {
           JOptionPane.showMessageDialog(ConversationPanel.this, "You are not signed in.");
         }

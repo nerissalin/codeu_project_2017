@@ -125,7 +125,8 @@ public final class Chat {
           System.out.println("ERROR: Conversation title not supplied.");
         } else {
           final String title = tokenScanner.nextLine().trim();
-          clientContext.conversation.startConversation(title, clientContext.user.getCurrent().id);
+          final String purpose = tokenScanner.nextLine().trim();
+          clientContext.conversation.startConversation(title, clientContext.user.getCurrent().id, purpose);
         }
       }
 

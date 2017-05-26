@@ -34,6 +34,7 @@ public final class MessagePanel extends JPanel {
   // These objects are modified by the Conversation Panel.
   private final JLabel messageOwnerLabel = new JLabel("Owner:", JLabel.RIGHT);
   private final JLabel messageConversationLabel = new JLabel("Conversation:", JLabel.LEFT);
+  private final JLabel messagePurposeLabel = new JLabel("Purpose:", JLabel.LEFT);
   private final DefaultListModel<String> messageListModel = new DefaultListModel<>();
 
   private final ClientContext clientContext;
@@ -57,6 +58,7 @@ public final class MessagePanel extends JPanel {
             u.name));
 
     messageConversationLabel.setText("Conversation: " + owningConversation.title);
+    messagePurposeLabel.setText("Purpose: " + owningConversation.purpose);
 
     getAllMessages(owningConversation);
   }
@@ -87,6 +89,11 @@ public final class MessagePanel extends JPanel {
     // can update it.
     messageConversationLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
     titleConvPanel.add(messageConversationLabel);
+
+    // messagePurposeLabel is an instance variable of Conversation panel
+    // can update it.
+    messagePurposeLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+    titleConvPanel.add(messagePurposeLabel);
 
     // messageOwnerLabel is an instance variable of Conversation panel
     // can update it.

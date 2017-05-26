@@ -36,6 +36,7 @@ public final class Conversation {
       Uuid.SERIALIZER.write(out, value.owner);
       Time.SERIALIZER.write(out, value.creation);
       Serializers.STRING.write(out, value.title);
+      Serializers.STRING.write(out, value.purpose);
       Serializers.collection(Uuid.SERIALIZER).write(out, value.users);
       Uuid.SERIALIZER.write(out, value.firstMessage);
       Uuid.SERIALIZER.write(out, value.lastMessage);
@@ -49,6 +50,7 @@ public final class Conversation {
           Uuid.SERIALIZER.read(in),
           Uuid.SERIALIZER.read(in),
           Time.SERIALIZER.read(in),
+          Serializers.STRING.read(in),
           Serializers.STRING.read(in)
       );
 
@@ -68,18 +70,20 @@ public final class Conversation {
   public final Uuid owner;
   public final Time creation;
   public final String title;
+  public final String purpose;
   public final Collection<Uuid> users = new HashSet<>();
   public Uuid firstMessage = Uuid.NULL;
   public Uuid lastMessage = Uuid.NULL;
 
-  public Conversation(Uuid id, Uuid owner, Time creation, String title) {
+  public Conversation(Uuid id, Uuid owner, Time creation, String title, String purpose) {
 
     this.id = id;
     this.owner = owner;
     this.creation = creation;
     this.title = title;
+    this.purpose = purpose;
 
-    this.summary = new ConversationSummary(id, owner, creation, title);
+    this.summary = new ConversationSummary(id, owner, creation, title, purpose);
 
   }
 }

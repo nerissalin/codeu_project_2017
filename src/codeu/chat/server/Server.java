@@ -147,8 +147,9 @@ public final class Server {
 
       final String title = Serializers.STRING.read(in);
       final Uuid owner = Uuid.SERIALIZER.read(in);
+      final String purpose = Serializers.STRING.read(in);
 
-      final Conversation conversation = controller.newConversation(title, owner);
+      final Conversation conversation = controller.newConversation(title, owner, purpose);
 
       Serializers.INTEGER.write(out, NetworkCode.NEW_CONVERSATION_RESPONSE);
       Serializers.nullable(Conversation.SERIALIZER).write(out, conversation);
@@ -275,7 +276,8 @@ public final class Server {
       conversation = controller.newConversation(relayConversation.id(),
                                                 relayConversation.text(),
                                                 user.id,
-                                                relayConversation.time());
+                                                relayConversation.time(),
+                                                relayConversation.subtext());
     }
 
     Message message = model.messageById().first(relayMessage.id());
@@ -300,9 +302,9 @@ public final class Server {
         final Message message = view.findMessage(messageId);
         relay.write(id,
                     secret,
-                    relay.pack(user.id, user.name, user.creation),
-                    relay.pack(conversation.id, conversation.title, conversation.creation),
-                    relay.pack(message.id, message.content, message.creation));
+                    relay.pack(user.id, user.name, user.creation, ""),
+                    relay.pack(conversation.id, conversation.title, conversation.creation, conversation.purpose),
+                    relay.pack(message.id, message.content, message.creation, ""));
       }
     };
   }

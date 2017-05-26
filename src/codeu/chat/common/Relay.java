@@ -67,6 +67,12 @@ public interface Relay {
       // this is the creation time.
       Time time();
 
+      // SUBTEXT
+      //
+      // The subtext for the component. This string is used to represent extra info as string
+      // values. For a conversation it is the purpose; empty for user/message.
+      String subtext();
+
     }
 
     // ID
@@ -106,9 +112,9 @@ public interface Relay {
 
   // PACK
   //
-  // Pack together a uuid, string, and time into a component. This is to make
-  // the signature for "write" to be shorter and easier to read.
-  Bundle.Component pack(Uuid id, String text, Time time);
+  // Pack together a uuid, string, time, and subtext into a component. This is to
+  // make the signature for "write" to be shorter and easier to read.
+  Bundle.Component pack(Uuid id, String text, Time time, String subtext);
 
   // WRITE
   //

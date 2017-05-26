@@ -39,11 +39,13 @@ public final class RemoteRelay implements Relay {
     private final Uuid id;
     private final Time time;
     private final String text;
+    private final String subtext;
 
-    public Component(Uuid id, Time time, String text) {
+    public Component(Uuid id, Time time, String text, String subtext) {
       this.id = id;
       this.time = time;
       this.text = text;
+      this.subtext = subtext;
     }
 
     @Override
@@ -54,6 +56,9 @@ public final class RemoteRelay implements Relay {
 
     @Override
     public String text() { return text; }
+
+    @Override
+    public String subtext() { return subtext; }
   }
 
   private static final Serializer<Relay.Bundle.Component> COMPONENT_SERIALIZER =
@@ -65,8 +70,9 @@ public final class RemoteRelay implements Relay {
       final Uuid id = Uuid.SERIALIZER.read(in);
       final String text = Serializers.STRING.read(in);
       final Time time = Time.SERIALIZER.read(in);
+      final String subtext = Serializers.STRING.read(in);
 
-      return new Component(id, time, text);
+      return new Component(id, time, text, subtext);
     }
 
     @Override
@@ -74,6 +80,7 @@ public final class RemoteRelay implements Relay {
       Uuid.SERIALIZER.write(out, value.id());
       Serializers.STRING.write(out, value.text());
       Time.SERIALIZER.write(out, value.time());
+      Serializers.STRING.write(out, value.subtext());
     }
   };
 
@@ -124,8 +131,8 @@ public final class RemoteRelay implements Relay {
   }
 
   @Override
-  public Relay.Bundle.Component pack(Uuid id, String text, Time time) {
-    return new Component(id, time, text);
+  public Relay.Bundle.Component pack(Uuid id, String text, Time time, String subtext) {
+    return new Component(id, time, text, subtext);
   }
 
   @Override
