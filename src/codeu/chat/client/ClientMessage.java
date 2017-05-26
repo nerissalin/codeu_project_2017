@@ -26,6 +26,7 @@ import codeu.chat.util.Logger;
 import codeu.chat.util.Method;
 import codeu.chat.util.Uuid;
 
+
 public final class ClientMessage {
 
   private final static Logger.Log LOG = Logger.newLog(ClientMessage.class);

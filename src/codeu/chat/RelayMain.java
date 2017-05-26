@@ -28,6 +28,7 @@ import codeu.chat.util.connections.Connection;
 import codeu.chat.util.connections.ConnectionSource;
 import codeu.chat.util.connections.ServerConnectionSource;
 
+
 final class RelayMain {
 
   private static final Logger.Log LOG = Logger.newLog(RelayMain.class);
@@ -66,7 +67,6 @@ final class RelayMain {
   private static void startRelay(final Server relay,
                                  final ConnectionSource source,
                                  final String teamFile) {
-
     final ServerFrontEnd frontEnd = new ServerFrontEnd(relay);
     LOG.info("Relay front end object created.");
 
@@ -138,6 +138,7 @@ final class RelayMain {
             // So instead just try to parse it and catch any exception.
 
             final Uuid id = Uuid.parse(tokens[0].trim());
+
             final byte[] secret = Secret.parse(tokens[1].trim());
 
             relay.addTeam(id, secret);
