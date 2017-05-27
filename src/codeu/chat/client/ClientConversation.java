@@ -40,7 +40,6 @@ public final class ClientConversation {
 
   // This is the set of conversations known to the server.
   private final Map<Uuid, ConversationSummary> summariesByUuid = new HashMap<>();
-  private final Map<Uuid, Conversation> conversationsByUuid = new HashMap<>();
 
   // This is the set of conversations known to the server, sorted by title.
   private Store<String, ConversationSummary> summariesSortedByTitle =
@@ -97,9 +96,9 @@ public final class ClientConversation {
           (validInputs) ? "server failure" : "bad input value");
     } else {
       LOG.info("New conversation: Title= \"%s\" UUID= %s", conv.title, conv.id);
-      conv.users.add(owner);
+
       currentSummary = conv.summary;
-      conversationsByUuid.put(conv.id, conv);
+
       updateAllConversations(currentSummary != null);
     }
   }
@@ -108,6 +107,7 @@ public final class ClientConversation {
 
   public void showAllConversations() {
     updateAllConversations(false);
+
     for (final ConversationSummary c : summariesByUuid.values()) {
       printConversation(c, userContext);
     }
@@ -162,12 +162,8 @@ public final class ClientConversation {
     summariesSortedByTitle = new Store<>(String.CASE_INSENSITIVE_ORDER);
 
     for (final ConversationSummary cs : view.getAllConversations()) {
-      Conversation conv = conversationsByUuid.get(cs.id);
-      Uuid currentUserID = userContext.getCurrent().id;
-      if (conv.users.contains(currentUserID)){ 
-        summariesByUuid.put(cs.id, cs);
-        summariesSortedByTitle.insert(cs.title, cs);
-      }
+      summariesByUuid.put(cs.id, cs);
+      summariesSortedByTitle.insert(cs.title, cs);
     }
 
     if (currentChanged) {

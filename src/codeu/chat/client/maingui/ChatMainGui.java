@@ -72,19 +72,19 @@ public final class ChatMainGui {
     mainViewPanel.setBorder(paneBorder());
     mainViewPanel.setBackground(Color.white);
 
+    // Build main panels - Users, Conversations, Messages.
+    final JPanel usersViewPanel = new UserPanel(clientContext);
+    usersViewPanel.setBorder(paneBorder());
+    final GridBagConstraints usersViewC = new GridBagConstraints();
+
     final MessagePanel messagesViewPanel = new MessagePanel(clientContext);
     messagesViewPanel.setBorder(paneBorder());
     final GridBagConstraints messagesViewC = new GridBagConstraints();
 
     // ConversationsPanel gets access to MessagesPanel
-    final ConversationPanel conversationsViewPanel = new ConversationPanel(clientContext, messagesViewPanel);
+    final JPanel conversationsViewPanel = new ConversationPanel(clientContext, messagesViewPanel);
     conversationsViewPanel.setBorder(paneBorder());
     final GridBagConstraints conversationViewC = new GridBagConstraints();
-
-    // Build main panels - Users, Conversations, Messages.
-    final JPanel usersViewPanel = new UserPanel(clientContext, conversationsViewPanel);
-    usersViewPanel.setBorder(paneBorder());
-    final GridBagConstraints usersViewC = new GridBagConstraints();
 
     //Make a seperate class for this
     final JPanel titleViewPanel = new TitlePanel();
