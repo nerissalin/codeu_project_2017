@@ -128,12 +128,14 @@ public final class ConversationPanel extends JPanel {
           
           if (n == 0){
             //Need to show list of possible participants, create a conversation with that list and add them
-
+            
           } else {
             //Need to add ALL to conversation
-            
+            final String s = (String) JOptionPane.showInputDialog(
+              ConversationPanel.this, "Enter title:", "Add Conversation", JOptionPane.PLAIN_MESSAGE,
+              null, null, "");
             if (s != null && s.length() > 0) {
-              clientContext.conversation.startConversation(s, clientContext.user.getCurrent().id);
+              clientContext.conversation.startConversation(s, clientContext.user.all);
               ConversationPanel.this.getAllConversations(listModel);
             }
           }
