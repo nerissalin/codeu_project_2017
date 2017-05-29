@@ -195,7 +195,9 @@ public final class UserPanel extends JPanel {
     usersList.clear();
 
     for (final User u : clientContext.user.getUsers()) {
-      usersList.addElement(u.name);
+      if (u.id != clientContext.user.all){
+        usersList.addElement(u.name);
+      }
     }
   }
 }
