@@ -86,6 +86,25 @@ public final class ClientConversation {
     printConversation(currentSummary, userContext);
   }
 
+  public void startConversation(String title, Uuid owner, Boolean all) {
+    final boolean validInputs = isValidTitle(title);
+
+    final Conversation conv = (validInputs) ? controller.newConversation(title, owner) : null;
+
+    if (conv == null) {
+      System.out.format("Error: conversation not created - %s.\n",
+          (validInputs) ? "server failure" : "bad input value");
+    } else {
+      LOG.info("New conversation: Title= \"%s\" UUID= %s", conv.title, conv.id);
+
+      currentSummary = conv.summary;
+      //all ? conv.
+
+      updateAllConversations(currentSummary != null);
+    }
+  }
+
+
   public void startConversation(String title, Uuid owner) {
     final boolean validInputs = isValidTitle(title);
 
