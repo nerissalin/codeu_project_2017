@@ -89,7 +89,7 @@ public final class ClientUser {
     printUser(current);
   }
 
-  public void addUser(String name) {
+  public Uuid addUser(String name) {
     final boolean validInputs = isValidName(name);
 
     final User user = (validInputs) ? controller.newUser(name) : null;
@@ -101,6 +101,7 @@ public final class ClientUser {
       LOG.info("New user complete, Name= \"%s\" UUID=%s", user.name, user.id);
       updateUsers();
     }
+    return user.id;
   }
 
   public void showAllUsers() {

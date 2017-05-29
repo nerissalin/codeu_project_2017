@@ -21,6 +21,7 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import java.util.Arrays;
 import codeu.chat.client.ClientContext;
 import codeu.chat.common.ConversationSummary;
 
@@ -121,14 +122,17 @@ public final class ConversationPanel extends JPanel {
       @Override
       public void actionPerformed(ActionEvent e) {
         if (clientContext.user.hasCurrent()) {
-          Object[] options = {"Private", "Public"}
+          Object[] options = {"Private", "Public"};
           int n = JOptionPane.showOptionDialog(ConversationPanel.this, "What type of conversation" + 
-          " would you like to create?", "Conversation Type", JOptionPane.PLAIN_MESSAGE,
+          " would you like to create?", "Conversation Type",JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
           null, options, options[0]);
           
           if (n == 0){
             //Need to show list of possible participants, create a conversation with that list and add them
-            
+            JList<String> list = new JList<String>(new String[] {"1", "2", "3"});
+            JOptionPane.showMessageDialog(
+              null, list, "Example", JOptionPane.PLAIN_MESSAGE);
+            System.out.println(Arrays.toString(list.getSelectedIndices()));
           } else {
             //Need to add ALL to conversation
             final String s = (String) JOptionPane.showInputDialog(
