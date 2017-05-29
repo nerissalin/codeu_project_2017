@@ -126,10 +126,18 @@ public final class ConversationPanel extends JPanel {
           " would you like to create?", "Conversation Type", JOptionPane.PLAIN_MESSAGE,
           null, options, options[0]);
           
-          if (s != null && s.length() > 0) {
-            clientContext.conversation.startConversation(s, clientContext.user.getCurrent().id);
-            ConversationPanel.this.getAllConversations(listModel);
+          if (n == 0){
+            //Need to show list of possible participants, create a conversation with that list and add them
+
+          } else {
+            //Need to add ALL to conversation
+            
+            if (s != null && s.length() > 0) {
+              clientContext.conversation.startConversation(s, clientContext.user.getCurrent().id);
+              ConversationPanel.this.getAllConversations(listModel);
+            }
           }
+          
         } else {
           JOptionPane.showMessageDialog(ConversationPanel.this, "You are not signed in.");
         }
