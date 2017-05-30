@@ -35,6 +35,7 @@ public final class UserPanel extends JPanel {
 
   private final ClientContext clientContext;
   private final ConversationPanel conversationPanel;
+  public JList<String> userList;
   public UserPanel(ClientContext clientContext, ConversationPanel conversationPanel) {
     super(new GridBagLayout());
     this.clientContext = clientContext;
@@ -84,7 +85,7 @@ public final class UserPanel extends JPanel {
     final GridBagConstraints listPanelC = new GridBagConstraints();
 
     final DefaultListModel<String> listModel = new DefaultListModel<>();
-    final JList<String> userList = new JList<>(listModel);
+    userList = new JList<>(listModel);
     userList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     userList.setVisibleRowCount(10);
     userList.setSelectedIndex(-1);

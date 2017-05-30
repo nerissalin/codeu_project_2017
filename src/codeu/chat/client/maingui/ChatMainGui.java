@@ -82,9 +82,11 @@ public final class ChatMainGui {
     conversationsViewPanel.setBorder(paneBorder());
     final GridBagConstraints conversationViewC = new GridBagConstraints();
 
-    final JPanel usersViewPanel = new UserPanel(clientContext, conversationsViewPanel);
+    final UserPanel usersViewPanel = new UserPanel(clientContext, conversationsViewPanel);
     usersViewPanel.setBorder(paneBorder());
     final GridBagConstraints usersViewC = new GridBagConstraints();
+
+    conversationsViewPanel.setUserPanel(usersViewPanel);
     
     //Make a seperate class for this
     final JPanel titleViewPanel = new TitlePanel();

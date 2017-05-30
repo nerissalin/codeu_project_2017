@@ -104,7 +104,7 @@ public final class ClientConversation {
   }
 
 
-  public void startConversation(String title, Uuid owner) {
+  public Conversation startConversation(String title, Uuid owner) {
     final boolean validInputs = isValidTitle(title);
 
     final Conversation conv = (validInputs) ? controller.newConversation(title, owner) : null;
@@ -121,6 +121,7 @@ public final class ClientConversation {
       conversationsByUuid.put(conv.id, conv);
       updateAllConversations(currentSummary != null);
     }
+    return conv;
   }
 
   public void setCurrent(ConversationSummary conv) { currentSummary = conv; }
@@ -189,7 +190,7 @@ public final class ClientConversation {
         summariesSortedByTitle.insert(cs.title, cs);
       }
     }
-    
+
     if (currentChanged) {
       updateCurrentConversation();
       messageContext.resetCurrent(true);

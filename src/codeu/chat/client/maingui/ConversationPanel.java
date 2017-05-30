@@ -34,6 +34,7 @@ public final class ConversationPanel extends JPanel {
 
   private final ClientContext clientContext;
   private final MessagePanel messagePanel;
+  private UserPanel userPanel;
   private HashSet<String> currUserConversations = new HashSet<String>();
   public JButton updateButton;
 
@@ -133,10 +134,29 @@ public final class ConversationPanel extends JPanel {
           
           if (n == 0){
             //Need to show list of possible participants, create a conversation with that list and add them
-            JList<String> list = new JList<String>(new String[] {"1", "2", "3"});
+            JList<String> list = userPanel.userList;
             JOptionPane.showMessageDialog(
-              null, list, "Example", JOptionPane.PLAIN_MESSAGE);
-            System.out.println(Arrays.toString(list.getSelectedIndices()));
+              null, list, "Which users would you like to add?", JOptionPane.PLAIN_MESSAGE);
+            final String s = (String) JOptionPane.showInputDialog(
+              ConversationPanel.this, "Enter title:", "Add Conversation", JOptionPane.PLAIN_MESSAGE,
+              null, null, "");
+            if (s != null && s.length() > 0) {
+              if (!currUserConversations.contains(s)){
+                Conversation conv = clientContext.conversation.startConversation(s, clientContext.user.getCurrent().id);
+                for (int i: list.getSelectedIndices()){
+                  String userName = list[i];
+                  User participant = ClientUser.users.get(userName);
+                  conv.users.add(participant.id);
+                }
+                ConversationPanel.this.getAllConversations(listModel);
+              } else {
+                JOptionPane.showMessageDialog(ConversationPanel.this, "This Conversation already exists");
+              }
+            } else {
+              JOptionPane.showMessageDialog(ConversationPanel.this, "Invalid Conversation Name");
+            }
+            
+            // System.out.println(Arrays.toString(list.getSelectedIndices()));
           } else {
             //Need to add ALL to conversation
             final String s = (String) JOptionPane.showInputDialog(
@@ -177,6 +197,10 @@ public final class ConversationPanel extends JPanel {
     });
 
     getAllConversations(listModel);
+  }
+
+  public void setUserPanel(UserPanel userPanel){
+    this.userPanel = userPanel;
   }
 
   // Populate ListModel - updates display objects.
