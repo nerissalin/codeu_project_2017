@@ -98,7 +98,7 @@ public final class ClientConversation {
     } else {
       LOG.info("New conversation: Title= \"%s\" UUID= %s", conv.title, conv.id);
 
-      conv.users.add(owner)
+      conv.users.add(owner);
       currentSummary = conv.summary;
       conv.users.add(userContext.admin);
       conversationsByUuid.put(conv.id, conv);

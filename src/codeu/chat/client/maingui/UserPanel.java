@@ -33,7 +33,7 @@ import codeu.chat.common.User;
 public final class UserPanel extends JPanel {
 
   private final ClientContext clientContext;
-  private final ConversationPanel conversationPanel
+  private final ConversationPanel conversationPanel;
   public UserPanel(ClientContext clientContext, ConversationPanel conversationPanel) {
     super(new GridBagLayout());
     this.clientContext = clientContext;
