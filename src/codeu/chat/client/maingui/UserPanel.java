@@ -25,6 +25,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import codeu.chat.client.ClientContext;
+import codeu.chat.client.ClientUser;
 import codeu.chat.common.User;
 
 // NOTE: JPanel is serializable, but there is no need to serialize UserPanel
@@ -198,7 +199,7 @@ public final class UserPanel extends JPanel {
     usersList.clear();
 
     for (final User u : clientContext.user.getUsers()) {
-      if (u.id != clientContext.user.all){
+      if (!u.name.equals("ALL")){
         usersList.addElement(u.name);
       }
     }

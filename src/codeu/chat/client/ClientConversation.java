@@ -62,9 +62,7 @@ public final class ClientConversation {
     if ((title.length() <= 0) || (title.length() > 64)) {
       clean = false;
     } else {
-
       // TODO: check for invalid characters
-
     }
     return clean;
   }
@@ -119,7 +117,7 @@ public final class ClientConversation {
 
       conv.users.add(owner);
       currentSummary = conv.summary;
-      conv.users.add(userContext.admin);
+      conv.users.add(ClientUser.admin);
       conversationsByUuid.put(conv.id, conv);
       updateAllConversations(currentSummary != null);
     }
@@ -186,12 +184,12 @@ public final class ClientConversation {
     for (final ConversationSummary cs : view.getAllConversations()) {
       Conversation conv = conversationsByUuid.get(cs.id);
       Uuid currentUserId = userContext.getCurrent().id;
-      if (conv.users.contains(currentUserId)){
+      if (conv.users.contains(currentUserId) || conv.users.contains(ClientUser.all)){
         summariesByUuid.put(cs.id, cs);
         summariesSortedByTitle.insert(cs.title, cs);
       }
     }
-
+    
     if (currentChanged) {
       updateCurrentConversation();
       messageContext.resetCurrent(true);

@@ -31,12 +31,13 @@ public final class ClientUser {
   private static final Collection<Uuid> EMPTY = Arrays.asList(new Uuid[0]);
   private final Controller controller;
   private final View view;
-  public Uuid all;
-  public Uuid admin;
+  public static Uuid all;
+  public static Uuid admin;
 
   private User current = null;
 
   private final Map<Uuid, User> usersById = new HashMap<>();
+  public final Map<String, User> users = new HashMap<>();
 
   // This is the set of users known to the server, sorted by name.
   private Store<String, User> usersByName = new Store<>(String.CASE_INSENSITIVE_ORDER);
@@ -47,14 +48,18 @@ public final class ClientUser {
   }
 
   // Validate the username string
-  static public boolean isValidName(String userName) {
+  public boolean isValidName(String userName) {
     boolean clean = true;
+    System.out.println(userName);
+    System.out.println(users.size());
+    System.out.println(users);
     if (userName.length() == 0) {
       clean = false;
     } else {
-
+      // if (users.containsKey(userName)){
+      //   clean = false;
+      // }
       // TODO: check for invalid characters
-
     }
     return clean;
   }
