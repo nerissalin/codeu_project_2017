@@ -32,6 +32,7 @@ public final class ClientUser {
   private final Controller controller;
   private final View view;
   public Uuid all;
+  public Uuid admin;
 
   private User current = null;
 
