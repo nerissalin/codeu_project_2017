@@ -40,7 +40,7 @@ public final class ClientConversation {
 
   // This is the set of conversations known to the server.
   private final Map<Uuid, ConversationSummary> summariesByUuid = new HashMap<>();
-  private final Map<Uuid, Conversation> conversationByUuid = new HashMap<>();
+  private final Map<Uuid, Conversation> conversationsByUuid = new HashMap<>();
 
   // This is the set of conversations known to the server, sorted by title.
   private Store<String, ConversationSummary> summariesSortedByTitle =
@@ -166,8 +166,8 @@ public final class ClientConversation {
 
     for (final ConversationSummary cs : view.getAllConversations()) {
       Conversation conv = conversationsByUuid.get(cs.id);
-      Uuid currentUserId = UserContext.getCurrent().id;
-      if (conv.users.contains(currentUserID)){
+      Uuid currentUserId = userContext.getCurrent().id;
+      if (conv.users.contains(currentUserId)){
         summariesByUuid.put(cs.id, cs);
         summariesSortedByTitle.insert(cs.title, cs);
       }
