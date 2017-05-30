@@ -31,6 +31,7 @@ public final class ClientUser {
   private static final Collection<Uuid> EMPTY = Arrays.asList(new Uuid[0]);
   private final Controller controller;
   private final View view;
+  public Uuid admin;
 
   private User current = null;
 

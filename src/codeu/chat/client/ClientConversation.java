@@ -100,7 +100,7 @@ public final class ClientConversation {
 
       conv.users.add(owner)
       currentSummary = conv.summary;
-
+      conv.users.add(userContext.admin);
       conversationsByUuid.put(conv.id, conv);
       updateAllConversations(currentSummary != null);
     }
