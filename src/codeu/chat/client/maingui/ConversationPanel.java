@@ -23,6 +23,7 @@ import javax.swing.event.ListSelectionListener;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Set;
 import codeu.chat.client.ClientContext;
 import codeu.chat.client.ClientUser;
 import codeu.chat.common.Conversation;
@@ -135,7 +136,12 @@ public final class ConversationPanel extends JPanel {
           null, options, options[0]);
           
           if (n == 0){
-            JList<String> list = userPanel.userList;
+            DefaultListModel<String> model = new DefaultListModel<String>();
+            for (String key: clientContext.user.users.keySet()){
+              model.addElement(key);
+            }
+
+            JList<String> list = new JList<String>(model);
             JOptionPane.showMessageDialog(
               null, list, "Which users would you like to add?", JOptionPane.PLAIN_MESSAGE);
             final String s = (String) JOptionPane.showInputDialog(
@@ -144,7 +150,6 @@ public final class ConversationPanel extends JPanel {
             if (s != null && s.length() > 0) {
               if (!currUserConversations.contains(s)){
                 Conversation conv = clientContext.conversation.startConversation(s, clientContext.user.getCurrent().id);
-                ListModel<String> model = list.getModel();
                 for (int i: list.getSelectedIndices()){
                   String userName = model.getElementAt(i);
                   User participant = clientContext.user.users.get(userName);
@@ -153,7 +158,7 @@ public final class ConversationPanel extends JPanel {
                   }
                   conv.users.add(participant.id);
                 }
-                
+
                 ConversationPanel.this.getAllConversations(listModel);
               } else {
                 JOptionPane.showMessageDialog(ConversationPanel.this, "This Conversation already exists");
