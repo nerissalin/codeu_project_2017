@@ -37,7 +37,6 @@ public final class ClientContext {
       System.out.println(ClientUser.admin);
       ClientUser.admin = user.addUser("ADMIN");
       System.out.println(ClientUser.admin);
-
     }
     // user.all = user.addUser("ALL");
     // user.admin = user.addUser("ADMIN");

@@ -25,7 +25,9 @@ import java.util.Arrays;
 import java.util.HashSet;
 import codeu.chat.client.ClientContext;
 import codeu.chat.client.ClientUser;
+import codeu.chat.common.Conversation;
 import codeu.chat.common.ConversationSummary;
+import codeu.chat.common.User;
 
 // NOTE: JPanel is serializable, but there is no need to serialize ConversationPanel
 // without the @SuppressWarnings, the compiler will complain of no override for serialVersionUID
@@ -133,7 +135,6 @@ public final class ConversationPanel extends JPanel {
           null, options, options[0]);
           
           if (n == 0){
-            //Need to show list of possible participants, create a conversation with that list and add them
             JList<String> list = userPanel.userList;
             JOptionPane.showMessageDialog(
               null, list, "Which users would you like to add?", JOptionPane.PLAIN_MESSAGE);
@@ -143,11 +144,16 @@ public final class ConversationPanel extends JPanel {
             if (s != null && s.length() > 0) {
               if (!currUserConversations.contains(s)){
                 Conversation conv = clientContext.conversation.startConversation(s, clientContext.user.getCurrent().id);
+                ListModel<String> model = list.getModel();
                 for (int i: list.getSelectedIndices()){
-                  String userName = list[i];
-                  User participant = ClientUser.users.get(userName);
+                  String userName = model.getElementAt(i);
+                  User participant = clientContext.user.users.get(userName);
+                  if (participant == null){
+                    JOptionPane.showMessageDialog(ConversationPanel.this, "We failed to find the requested user");
+                  }
                   conv.users.add(participant.id);
                 }
+                
                 ConversationPanel.this.getAllConversations(listModel);
               } else {
                 JOptionPane.showMessageDialog(ConversationPanel.this, "This Conversation already exists");
@@ -156,7 +162,6 @@ public final class ConversationPanel extends JPanel {
               JOptionPane.showMessageDialog(ConversationPanel.this, "Invalid Conversation Name");
             }
             
-            // System.out.println(Arrays.toString(list.getSelectedIndices()));
           } else {
             //Need to add ALL to conversation
             final String s = (String) JOptionPane.showInputDialog(

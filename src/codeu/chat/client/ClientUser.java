@@ -50,9 +50,6 @@ public final class ClientUser {
   // Validate the username string
   public boolean isValidName(String userName) {
     boolean clean = true;
-    System.out.println(userName);
-    System.out.println(users.size());
-    System.out.println(users);
     if (userName.length() == 0) {
       clean = false;
     } else {
@@ -107,6 +104,7 @@ public final class ClientUser {
       LOG.info("New user complete, Name= \"%s\" UUID=%s", user.name, user.id);
       updateUsers();
     }
+    users.put(name, user);
     return user.id;
   }
 
