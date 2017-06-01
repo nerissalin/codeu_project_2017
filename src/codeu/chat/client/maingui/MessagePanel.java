@@ -50,6 +50,8 @@ public final class MessagePanel extends JPanel {
   public void update(ConversationSummary owningConversation) {
     if (owningConversation == null){
       messageParticipantsLabel.setText("Participants: ");
+      messageConversationLabel.setText("Conversation: ");
+
     } else {
       if (owningConversation.owner.equals("ALL")){
         messageParticipantsLabel.setText("Participants: ALL MEMBERS");
@@ -76,6 +78,8 @@ public final class MessagePanel extends JPanel {
         String message = sb.substring(0, last);
         messageParticipantsLabel.setText(message);
       }
+      messageConversationLabel.setText("Conversation: " + owningConversation.title);
+
     }
     // final User u = (owningConversation == null) ?
     //     null :
@@ -86,7 +90,6 @@ public final class MessagePanel extends JPanel {
     //         ((owningConversation==null) ? "" : owningConversation.owner) :
     //         u.name));
 
-    messageConversationLabel.setText("Conversation: " + owningConversation.title);
 
     getAllMessages(owningConversation);
   }

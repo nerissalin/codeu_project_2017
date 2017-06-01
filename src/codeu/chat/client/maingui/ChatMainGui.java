@@ -87,6 +87,7 @@ public final class ChatMainGui {
     final GridBagConstraints usersViewC = new GridBagConstraints();
 
     conversationsViewPanel.setUserPanel(usersViewPanel);
+    usersViewPanel.setMessagePanel(messagesViewPanel);
     
     //Make a seperate class for this
     final JPanel titleViewPanel = new TitlePanel();

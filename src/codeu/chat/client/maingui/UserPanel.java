@@ -26,6 +26,7 @@ import javax.swing.event.ListSelectionListener;
 
 import codeu.chat.client.ClientContext;
 import codeu.chat.client.ClientUser;
+import codeu.chat.common.ConversationSummary;
 import codeu.chat.common.User;
 
 // NOTE: JPanel is serializable, but there is no need to serialize UserPanel
@@ -35,6 +36,7 @@ public final class UserPanel extends JPanel {
 
   private final ClientContext clientContext;
   private final ConversationPanel conversationPanel;
+  public MessagePanel messagePanel;
   public JList<String> userList;
   public UserPanel(ClientContext clientContext, ConversationPanel conversationPanel) {
     super(new GridBagLayout());
@@ -160,7 +162,10 @@ public final class UserPanel extends JPanel {
           clientContext.user.signInUser(data);
           conversationPanel.updateButton.doClick();
           userSignedInLabel.setText("Hello " + data);
+          messagePanel.update((ConversationSummary) null);
         }
+
+
       }
     });
 
@@ -173,6 +178,7 @@ public final class UserPanel extends JPanel {
             clientContext.user.signInUser(data);
             conversationPanel.updateButton.doClick();
             userSignedInLabel.setText("Hello " + data);
+            messagePanel.update((ConversationSummary) null);
           }
         }
       }
@@ -204,5 +210,9 @@ public final class UserPanel extends JPanel {
         usersList.addElement(u.name);
       }
     }
+  }
+
+  public void setMessagePanel(MessagePanel messagePanel){
+    this.messagePanel = messagePanel;
   }
 }
