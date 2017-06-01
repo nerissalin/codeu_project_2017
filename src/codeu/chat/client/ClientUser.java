@@ -36,7 +36,7 @@ public final class ClientUser {
 
   private User current = null;
 
-  private final Map<Uuid, User> usersById = new HashMap<>();
+  public final Map<Uuid, User> usersById = new HashMap<>();
   public final Map<String, User> users = new HashMap<>();
 
   // This is the set of users known to the server, sorted by name.
