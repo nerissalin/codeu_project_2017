@@ -68,9 +68,13 @@ public final class MessagePanel extends JPanel {
           if (!username.equals("ADMIN")){
             sb = sb.append(username);
             sb = sb.append(", ");
-          } else if (username.equals("ALL")){
-            sb = new StringBuilder("PArticipants: ALL MEMBERS"); 
-            break;
+          } 
+
+          if (username.equals("ALL")){
+            sb = new StringBuilder("Participants: ALL MEMBERS"); 
+            messageParticipantsLabel.setText(sb.toString());
+            messageConversationLabel.setText("Conversation: " + owningConversation.title);
+            return;
           } 
         }
         int last = sb.lastIndexOf(", ");
@@ -125,6 +129,10 @@ public final class MessagePanel extends JPanel {
     // can update it.
     messageParticipantsLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
     titleOwnerPanel.add(messageParticipantsLabel);
+
+    final JButton userAddButton = new JButton("+");
+    userAddButton.setAlignmentX(Component.RIGHT_ALIGNMENT);
+    titleOwnerPanel.add(userAddButton);
 
     titlePanel.add(titleConvPanel, titleConvPanelC);
     titlePanel.add(titleOwnerPanel, titleOwnerPanelC);
@@ -203,6 +211,37 @@ public final class MessagePanel extends JPanel {
             MessagePanel.this.getAllMessages(clientContext.conversation.getCurrent());
           }
         }
+      }
+    });
+
+    userAddButton.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        if (clientContext.conversation.getCurrent() == null){
+          JOptionPane.showMessageDialog(MessagePanel.this, "You must select a conversation.");
+        } else {
+
+          DefaultListModel<String> model = new DefaultListModel<String>();
+          for (String key: clientContext.user.users.keySet()){
+            model.addElement(key);
+          }
+
+          JList<String> list = new JList<String>(model);
+          JOptionPane.showMessageDialog(
+            null, list, "Which users would you like to add?", JOptionPane.PLAIN_MESSAGE);
+          
+          ConversationSummary convSum = clientContext.conversation.getCurrent();
+          Conversation conv = clientContext.conversation.conversationsByUuid.get(convSum.id);
+          for (int i: list.getSelectedIndices()){
+            String userName = model.getElementAt(i);
+            User participant = clientContext.user.users.get(userName);
+            if (participant == null){
+              JOptionPane.showMessageDialog(MessagePanel.this, "We failed to find the requested user");
+            }
+            conv.users.add(participant.id);
+          }
+
+        update(convSum);
+        } 
       }
     });
 
