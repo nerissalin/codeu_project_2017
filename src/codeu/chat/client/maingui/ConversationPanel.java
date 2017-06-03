@@ -21,8 +21,14 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 import codeu.chat.client.ClientContext;
+import codeu.chat.client.ClientUser;
+import codeu.chat.common.Conversation;
 import codeu.chat.common.ConversationSummary;
+import codeu.chat.common.User;
 
 // NOTE: JPanel is serializable, but there is no need to serialize ConversationPanel
 // without the @SuppressWarnings, the compiler will complain of no override for serialVersionUID
@@ -31,6 +37,8 @@ public final class ConversationPanel extends JPanel {
 
   private final ClientContext clientContext;
   private final MessagePanel messagePanel;
+  private UserPanel userPanel;
+  private HashSet<String> currUserConversations = new HashSet<String>();
   public JButton updateButton;
 
   public ConversationPanel(ClientContext clientContext, MessagePanel messagePanel) {
@@ -122,13 +130,60 @@ public final class ConversationPanel extends JPanel {
       @Override
       public void actionPerformed(ActionEvent e) {
         if (clientContext.user.hasCurrent()) {
-          final String s = (String) JOptionPane.showInputDialog(
+          Object[] options = {"Private", "Public"};
+          int n = JOptionPane.showOptionDialog(ConversationPanel.this, "What type of conversation" + 
+          " would you like to create?", "Conversation Type",JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
+          null, options, options[0]);
+          
+          if (n == 0){
+            DefaultListModel<String> model = new DefaultListModel<String>();
+            for (String key: clientContext.user.users.keySet()){
+              model.addElement(key);
+            }
+
+            JList<String> list = new JList<String>(model);
+            JOptionPane.showMessageDialog(
+              null, list, "Which users would you like to add?", JOptionPane.PLAIN_MESSAGE);
+            final String s = (String) JOptionPane.showInputDialog(
               ConversationPanel.this, "Enter title:", "Add Conversation", JOptionPane.PLAIN_MESSAGE,
               null, null, "");
-          if (s != null && s.length() > 0) {
-            clientContext.conversation.startConversation(s, clientContext.user.getCurrent().id);
-            ConversationPanel.this.getAllConversations(listModel);
+            if (s != null && s.length() > 0) {
+              if (!currUserConversations.contains(s)){
+                Conversation conv = clientContext.conversation.startConversation(s, clientContext.user.getCurrent().id);
+                for (int i: list.getSelectedIndices()){
+                  String userName = model.getElementAt(i);
+                  User participant = clientContext.user.users.get(userName);
+                  if (participant == null){
+                    JOptionPane.showMessageDialog(ConversationPanel.this, "We failed to find the requested user");
+                  }
+                  conv.users.add(participant.id);
+                }
+
+                ConversationPanel.this.getAllConversations(listModel);
+              } else {
+                JOptionPane.showMessageDialog(ConversationPanel.this, "This Conversation already exists");
+              }
+            } else {
+              JOptionPane.showMessageDialog(ConversationPanel.this, "Invalid Conversation Name");
+            }
+            
+          } else {
+            //Need to add ALL to conversation
+            final String s = (String) JOptionPane.showInputDialog(
+              ConversationPanel.this, "Enter title:", "Add Conversation", JOptionPane.PLAIN_MESSAGE,
+              null, null, "");
+            if (s != null && s.length() > 0) {
+              if (!currUserConversations.contains(s)){
+                clientContext.conversation.startConversation(s, ClientUser.all);
+                ConversationPanel.this.getAllConversations(listModel);
+              } else {
+                JOptionPane.showMessageDialog(ConversationPanel.this, "This Conversation already exists");
+              }
+            } else {
+              JOptionPane.showMessageDialog(ConversationPanel.this, "Invalid Conversation Name");
+            }
           }
+          
         } else {
           JOptionPane.showMessageDialog(ConversationPanel.this, "You are not signed in.");
         }
@@ -154,6 +209,10 @@ public final class ConversationPanel extends JPanel {
     getAllConversations(listModel);
   }
 
+  public void setUserPanel(UserPanel userPanel){
+    this.userPanel = userPanel;
+  }
+
   // Populate ListModel - updates display objects.
   private void getAllConversations(DefaultListModel<String> convDisplayList) {
 
@@ -162,6 +221,7 @@ public final class ConversationPanel extends JPanel {
 
     for (final ConversationSummary conv : clientContext.conversation.getConversationSummaries()) {
       convDisplayList.addElement(conv.title);
+      currUserConversations.add(conv.title);
     }
   }
 

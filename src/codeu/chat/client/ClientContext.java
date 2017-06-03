@@ -30,6 +30,15 @@ public final class ClientContext {
     user = new ClientUser(controller, view);
     conversation = new ClientConversation(controller, view, user);
     message = new ClientMessage(controller, view, user, conversation);
-    user.admin = user.addUser("ADMIN");
+    System.out.println(ClientUser.all);
+    if (!user.users.containsKey("ALL")){
+      ClientUser.all = user.addUser("ALL");
+      System.out.println(ClientUser.all);
+      System.out.println(ClientUser.admin);
+      ClientUser.admin = user.addUser("ADMIN");
+      System.out.println(ClientUser.admin);
+    }
+    // user.all = user.addUser("ALL");
+    // user.admin = user.addUser("ADMIN");
   }
 }

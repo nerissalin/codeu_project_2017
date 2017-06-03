@@ -25,6 +25,8 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import codeu.chat.client.ClientContext;
+import codeu.chat.client.ClientUser;
+import codeu.chat.common.ConversationSummary;
 import codeu.chat.common.User;
 
 // NOTE: JPanel is serializable, but there is no need to serialize UserPanel
@@ -34,6 +36,8 @@ public final class UserPanel extends JPanel {
 
   private final ClientContext clientContext;
   private final ConversationPanel conversationPanel;
+  public MessagePanel messagePanel;
+  public JList<String> userList;
   public UserPanel(ClientContext clientContext, ConversationPanel conversationPanel) {
     super(new GridBagLayout());
     this.clientContext = clientContext;
@@ -83,7 +87,7 @@ public final class UserPanel extends JPanel {
     final GridBagConstraints listPanelC = new GridBagConstraints();
 
     final DefaultListModel<String> listModel = new DefaultListModel<>();
-    final JList<String> userList = new JList<>(listModel);
+    userList = new JList<>(listModel);
     userList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     userList.setVisibleRowCount(10);
     userList.setSelectedIndex(-1);
@@ -158,7 +162,10 @@ public final class UserPanel extends JPanel {
           clientContext.user.signInUser(data);
           conversationPanel.updateButton.doClick();
           userSignedInLabel.setText("Hello " + data);
+          messagePanel.update((ConversationSummary) null);
         }
+
+
       }
     });
 
@@ -171,6 +178,7 @@ public final class UserPanel extends JPanel {
             clientContext.user.signInUser(data);
             conversationPanel.updateButton.doClick();
             userSignedInLabel.setText("Hello " + data);
+            messagePanel.update((ConversationSummary) null);
           }
         }
       }
@@ -198,7 +206,13 @@ public final class UserPanel extends JPanel {
     usersList.clear();
 
     for (final User u : clientContext.user.getUsers()) {
-      usersList.addElement(u.name);
+      if (!u.name.equals("ALL")){
+        usersList.addElement(u.name);
+      }
     }
+  }
+
+  public void setMessagePanel(MessagePanel messagePanel){
+    this.messagePanel = messagePanel;
   }
 }

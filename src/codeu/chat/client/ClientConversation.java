@@ -40,7 +40,7 @@ public final class ClientConversation {
 
   // This is the set of conversations known to the server.
   private final Map<Uuid, ConversationSummary> summariesByUuid = new HashMap<>();
-  private final Map<Uuid, Conversation> conversationsByUuid = new HashMap<>();
+  public final Map<Uuid, Conversation> conversationsByUuid = new HashMap<>();
 
   // This is the set of conversations known to the server, sorted by title.
   private Store<String, ConversationSummary> summariesSortedByTitle =
@@ -62,9 +62,7 @@ public final class ClientConversation {
     if ((title.length() <= 0) || (title.length() > 64)) {
       clean = false;
     } else {
-
       // TODO: check for invalid characters
-
     }
     return clean;
   }
@@ -87,7 +85,26 @@ public final class ClientConversation {
     printConversation(currentSummary, userContext);
   }
 
-  public void startConversation(String title, Uuid owner) {
+  public void startConversation(String title, Uuid owner, Boolean all) {
+    final boolean validInputs = isValidTitle(title);
+
+    final Conversation conv = (validInputs) ? controller.newConversation(title, owner) : null;
+
+    if (conv == null) {
+      System.out.format("Error: conversation not created - %s.\n",
+          (validInputs) ? "server failure" : "bad input value");
+    } else {
+      LOG.info("New conversation: Title= \"%s\" UUID= %s", conv.title, conv.id);
+
+      currentSummary = conv.summary;
+      //all ? conv.
+
+      updateAllConversations(currentSummary != null);
+    }
+  }
+
+
+  public Conversation startConversation(String title, Uuid owner) {
     final boolean validInputs = isValidTitle(title);
 
     final Conversation conv = (validInputs) ? controller.newConversation(title, owner) : null;
@@ -100,10 +117,11 @@ public final class ClientConversation {
 
       conv.users.add(owner);
       currentSummary = conv.summary;
-      conv.users.add(userContext.admin);
+      conv.users.add(ClientUser.admin);
       conversationsByUuid.put(conv.id, conv);
       updateAllConversations(currentSummary != null);
     }
+    return conv;
   }
 
   public void setCurrent(ConversationSummary conv) { currentSummary = conv; }
@@ -167,7 +185,7 @@ public final class ClientConversation {
     for (final ConversationSummary cs : view.getAllConversations()) {
       Conversation conv = conversationsByUuid.get(cs.id);
       Uuid currentUserId = userContext.getCurrent().id;
-      if (conv.users.contains(currentUserId)){
+      if (conv.users.contains(currentUserId) || conv.users.contains(ClientUser.all)){
         summariesByUuid.put(cs.id, cs);
         summariesSortedByTitle.insert(cs.title, cs);
       }

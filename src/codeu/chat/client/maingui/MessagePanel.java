@@ -20,19 +20,21 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import javax.swing.*;
+import java.util.Iterator;
 
 import codeu.chat.client.ClientContext;
+import codeu.chat.common.Conversation;
 import codeu.chat.common.ConversationSummary;
 import codeu.chat.common.Message;
 import codeu.chat.common.User;
-
+import codeu.chat.util.Uuid;
 // NOTE: JPanel is serializable, but there is no need to serialize MessagePanel
 // without the @SuppressWarnings, the compiler will complain of no override for serialVersionUID
 @SuppressWarnings("serial")
 public final class MessagePanel extends JPanel {
 
   // These objects are modified by the Conversation Panel.
-  private final JLabel messageOwnerLabel = new JLabel("Owner:", JLabel.RIGHT);
+  private final JLabel messageParticipantsLabel = new JLabel("Participants:", JLabel.RIGHT);
   private final JLabel messageConversationLabel = new JLabel("Conversation:", JLabel.LEFT);
   private final DefaultListModel<String> messageListModel = new DefaultListModel<>();
 
@@ -46,17 +48,52 @@ public final class MessagePanel extends JPanel {
 
   // External agent calls this to trigger an update of this panel's contents.
   public void update(ConversationSummary owningConversation) {
+    if (owningConversation == null){
+      messageParticipantsLabel.setText("Participants: ");
+      messageConversationLabel.setText("Conversation: ");
 
-    final User u = (owningConversation == null) ?
-        null :
-        clientContext.user.lookup(owningConversation.owner);
+    } else {
+      if (owningConversation.owner.equals("ALL")){
+        messageParticipantsLabel.setText("Participants: ALL MEMBERS");
+      } else {
+        StringBuilder sb = new StringBuilder();
+        sb = sb.append("Participants: ");
+        Uuid convID = owningConversation.id;
+        Conversation conv = clientContext.conversation.conversationsByUuid.get(convID);
+        Iterator<Uuid> users = conv.users.iterator();
+        while (users.hasNext()){
+          Uuid userID = users.next();
+          User user = clientContext.user.usersById.get(userID);
+          String username = user.name;
+          if (!username.equals("ADMIN")){
+            sb = sb.append(username);
+            sb = sb.append(", ");
+          } 
 
-    messageOwnerLabel.setText("Owner: " +
-        ((u==null) ?
-            ((owningConversation==null) ? "" : owningConversation.owner) :
-            u.name));
+          if (username.equals("ALL")){
+            sb = new StringBuilder("Participants: ALL MEMBERS"); 
+            messageParticipantsLabel.setText(sb.toString());
+            messageConversationLabel.setText("Conversation: " + owningConversation.title);
+            return;
+          } 
+        }
+        int last = sb.lastIndexOf(", ");
+        last = (last == 0)? sb.length() : last;
+        String message = sb.substring(0, last);
+        messageParticipantsLabel.setText(message);
+      }
+      messageConversationLabel.setText("Conversation: " + owningConversation.title);
 
-    messageConversationLabel.setText("Conversation: " + owningConversation.title);
+    }
+    // final User u = (owningConversation == null) ?
+    //     null :
+    //     clientContext.user.lookup(owningConversation.owner);
+
+    // messageParticipantsLabel.setText("Owner: " +
+    //     ((u==null) ?
+    //         ((owningConversation==null) ? "" : owningConversation.owner) :
+    //         u.name));
+
 
     getAllMessages(owningConversation);
   }
@@ -88,10 +125,14 @@ public final class MessagePanel extends JPanel {
     messageConversationLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
     titleConvPanel.add(messageConversationLabel);
 
-    // messageOwnerLabel is an instance variable of Conversation panel
+    // messageParticipantsLabel is an instance variable of Conversation panel
     // can update it.
-    messageOwnerLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-    titleOwnerPanel.add(messageOwnerLabel);
+    messageParticipantsLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+    titleOwnerPanel.add(messageParticipantsLabel);
+
+    final JButton userAddButton = new JButton("+");
+    userAddButton.setAlignmentX(Component.RIGHT_ALIGNMENT);
+    titleOwnerPanel.add(userAddButton);
 
     titlePanel.add(titleConvPanel, titleConvPanelC);
     titlePanel.add(titleOwnerPanel, titleOwnerPanelC);
@@ -170,6 +211,37 @@ public final class MessagePanel extends JPanel {
             MessagePanel.this.getAllMessages(clientContext.conversation.getCurrent());
           }
         }
+      }
+    });
+
+    userAddButton.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        if (clientContext.conversation.getCurrent() == null){
+          JOptionPane.showMessageDialog(MessagePanel.this, "You must select a conversation.");
+        } else {
+
+          DefaultListModel<String> model = new DefaultListModel<String>();
+          for (String key: clientContext.user.users.keySet()){
+            model.addElement(key);
+          }
+
+          JList<String> list = new JList<String>(model);
+          JOptionPane.showMessageDialog(
+            null, list, "Which users would you like to add?", JOptionPane.PLAIN_MESSAGE);
+          
+          ConversationSummary convSum = clientContext.conversation.getCurrent();
+          Conversation conv = clientContext.conversation.conversationsByUuid.get(convSum.id);
+          for (int i: list.getSelectedIndices()){
+            String userName = model.getElementAt(i);
+            User participant = clientContext.user.users.get(userName);
+            if (participant == null){
+              JOptionPane.showMessageDialog(MessagePanel.this, "We failed to find the requested user");
+            }
+            conv.users.add(participant.id);
+          }
+
+        update(convSum);
+        } 
       }
     });
 
